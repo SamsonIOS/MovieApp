@@ -13,17 +13,29 @@
 		332670C42906C87C00EE3472 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 332670C22906C87C00EE3472 /* Main.storyboard */; };
 		332670C62906C87E00EE3472 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 332670C52906C87E00EE3472 /* Assets.xcassets */; };
 		332670C92906C87E00EE3472 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 332670C72906C87E00EE3472 /* LaunchScreen.storyboard */; };
+		33A73F71290720F00089B6F2 /* FirstTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A73F70290720F00089B6F2 /* FirstTableViewCell.swift */; };
+		33A73F742907F80C0089B6F2 /* ModelFilm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A73F732907F80C0089B6F2 /* ModelFilm.swift */; };
+		33A73F762907FB0D0089B6F2 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A73F752907FB0D0089B6F2 /* Networking.swift */; };
+		33A73F78290801A80089B6F2 /* swiftFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A73F77290801A80089B6F2 /* swiftFile.swift */; };
+		33A73F7A29085E860089B6F2 /* EnumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A73F7929085E850089B6F2 /* EnumCell.swift */; };
+		33A73F7C29087BDF0089B6F2 /* SegmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A73F7B29087BDF0089B6F2 /* SegmentTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		332670B92906C87C00EE3472 /* MovieApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		332670BC2906C87C00EE3472 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		332670BE2906C87C00EE3472 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		332670C02906C87C00EE3472 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		332670C02906C87C00EE3472 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		332670C32906C87C00EE3472 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		332670C52906C87E00EE3472 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		332670C82906C87E00EE3472 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		332670CA2906C87E00EE3472 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		33A73F70290720F00089B6F2 /* FirstTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstTableViewCell.swift; sourceTree = "<group>"; };
+		33A73F732907F80C0089B6F2 /* ModelFilm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelFilm.swift; sourceTree = "<group>"; };
+		33A73F752907FB0D0089B6F2 /* Networking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		33A73F77290801A80089B6F2 /* swiftFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swiftFile.swift; sourceTree = "<group>"; };
+		33A73F7929085E850089B6F2 /* EnumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumCell.swift; sourceTree = "<group>"; };
+		33A73F7B29087BDF0089B6F2 /* SegmentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +52,8 @@
 		332670B02906C87C00EE3472 = {
 			isa = PBXGroup;
 			children = (
+				33A73F77290801A80089B6F2 /* swiftFile.swift */,
+				33A73F7929085E850089B6F2 /* EnumCell.swift */,
 				332670BB2906C87C00EE3472 /* MovieApp */,
 				332670BA2906C87C00EE3472 /* Products */,
 			);
@@ -58,13 +72,25 @@
 			children = (
 				332670BC2906C87C00EE3472 /* AppDelegate.swift */,
 				332670BE2906C87C00EE3472 /* SceneDelegate.swift */,
+				33A73F722907F7F30089B6F2 /* Model */,
 				332670C02906C87C00EE3472 /* ViewController.swift */,
+				33A73F752907FB0D0089B6F2 /* Networking.swift */,
+				33A73F70290720F00089B6F2 /* FirstTableViewCell.swift */,
+				33A73F7B29087BDF0089B6F2 /* SegmentTableViewCell.swift */,
 				332670C22906C87C00EE3472 /* Main.storyboard */,
 				332670C52906C87E00EE3472 /* Assets.xcassets */,
 				332670C72906C87E00EE3472 /* LaunchScreen.storyboard */,
 				332670CA2906C87E00EE3472 /* Info.plist */,
 			);
 			path = MovieApp;
+			sourceTree = "<group>";
+		};
+		33A73F722907F7F30089B6F2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				33A73F732907F80C0089B6F2 /* ModelFilm.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -152,7 +178,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "if which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
 		};
 		332670D12906C8CC00EE3472 /* Swift Formatter */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -170,7 +196,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftformat >/dev/null; then\n  swiftformat .\nelse\n  echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			shellScript = "if which swiftformat >/dev/null; then\n  swiftformat .\nelse\n  echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -181,6 +207,12 @@
 			files = (
 				332670C12906C87C00EE3472 /* ViewController.swift in Sources */,
 				332670BD2906C87C00EE3472 /* AppDelegate.swift in Sources */,
+				33A73F742907F80C0089B6F2 /* ModelFilm.swift in Sources */,
+				33A73F78290801A80089B6F2 /* swiftFile.swift in Sources */,
+				33A73F762907FB0D0089B6F2 /* Networking.swift in Sources */,
+				33A73F71290720F00089B6F2 /* FirstTableViewCell.swift in Sources */,
+				33A73F7A29085E860089B6F2 /* EnumCell.swift in Sources */,
+				33A73F7C29087BDF0089B6F2 /* SegmentTableViewCell.swift in Sources */,
 				332670BF2906C87C00EE3472 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

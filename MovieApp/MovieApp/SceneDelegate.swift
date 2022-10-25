@@ -3,7 +3,7 @@
 
 import UIKit
 
-/// Scene Delegate
+/// vc
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
@@ -11,5 +11,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
-    ) {}
+    ) {
+        let pageVC = UINavigationController(rootViewController: ViewController())
+        window?.rootViewController = pageVC
+        window?.makeKeyAndVisible()
+    }
 }
