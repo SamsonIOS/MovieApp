@@ -1,4 +1,4 @@
-// swiftFile.swift
+// FilmsViewModel.swift
 // Copyright © RoadMap. All rights reserved.
 
 import Foundation
@@ -15,6 +15,7 @@ final class MovieViewModel {
 
             switch result {
             case let .success(listOf):
+                guard let listOf = listOf else { return }
                 self?.popularMovies = listOf.films
                 completion()
             case let .failure(error):

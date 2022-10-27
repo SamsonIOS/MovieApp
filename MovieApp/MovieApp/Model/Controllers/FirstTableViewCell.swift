@@ -34,7 +34,7 @@ final class FirstTableViewCell: UITableViewCell {
 
     let viewReit: UIView = {
         let view = UIView()
-        view.backgroundColor = .green
+        view.backgroundColor = .purple
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 12
         view.clipsToBounds = true
@@ -43,7 +43,7 @@ final class FirstTableViewCell: UITableViewCell {
 
     let retingLabel: UILabel = {
         let label = UILabel()
-        label.textColor = .black
+        label.textColor = .white
         label.font = .systemFont(ofSize: 12, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -84,8 +84,8 @@ final class FirstTableViewCell: UITableViewCell {
             infoFilmLabel.widthAnchor.constraint(equalToConstant: 170),
             infoFilmLabel.heightAnchor.constraint(equalToConstant: 150),
 
-            viewReit.trailingAnchor.constraint(equalTo: filmImageView.trailingAnchor),
-            viewReit.bottomAnchor.constraint(equalTo: filmImageView.bottomAnchor, constant: 0),
+            viewReit.leadingAnchor.constraint(equalTo: filmImageView.leadingAnchor),
+            viewReit.topAnchor.constraint(equalTo: filmImageView.topAnchor, constant: 0),
             viewReit.widthAnchor.constraint(equalToConstant: 24),
             viewReit.heightAnchor.constraint(equalToConstant: 24),
 

@@ -7,8 +7,16 @@ import Foundation
 final class ApiFilms {
     private var dataTask: URLSessionDataTask?
 
-    func getMoviesData(filmsUrl: String, completion: @escaping (Result<ModelFilm, Error>) -> ()) {
-        guard let url = URL(string: filmsUrl) else { return }
+    func getActorData(actorsUrl: String, completion: @escaping (Result<ActorModel?, Error>) -> ()) {
+        universalFunc(url: actorsUrl, completion: completion)
+    }
+
+    func getMoviesData(filmsUrl: String, completion: @escaping (Result<ModelFilm?, Error>) -> ()) {
+        universalFunc(url: filmsUrl, completion: completion)
+    }
+
+    func universalFunc<T: Decodable>(url: String, completion: @escaping (Result<T?, Error>) -> ()) {
+        guard let url = URL(string: url) else { return }
         dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
                 completion(.failure(error))
@@ -27,7 +35,7 @@ final class ApiFilms {
             }
             do {
                 let decoder = JSONDecoder()
-                let jsonData = try decoder.decode(ModelFilm.self, from: data)
+                let jsonData = try decoder.decode(T.self, from: data)
                 DispatchQueue.main.async {
                     completion(.success(jsonData))
                 }
