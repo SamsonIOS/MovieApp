@@ -3,31 +3,43 @@
 
 import UIKit
 
-/// vc
-class CollectionViewCell: UICollectionViewCell {
-    let photoOfActor: UIImageView = {
+/// Кастомная ячейка коллекции
+final class CollectionViewCell: UICollectionViewCell {
+    // MARK: Constants
+
+    private enum Constants {
+        static let urlImage = "https://image.tmdb.org/t/p/w500"
+        static let dataTaskError = "DataTask error: "
+        static let response = "Response"
+        static let dontGetData = "Данные не получены"
+    }
+
+    // MARK: Public properties
+
+    private let photoOfActor: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleToFill
+        imageView.layer.cornerRadius = 5
+        imageView.clipsToBounds = true
+        imageView.layer.borderWidth = 1
+        imageView.layer.borderColor = UIColor.orange.cgColor
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
 
-    let nameOfActor: UILabel = {
+    private let nameOfActor: UILabel = {
         let name = UILabel()
-        name.textColor = .black
+        name.textColor = .white
         name.translatesAutoresizingMaskIntoConstraints = false
         name.font = .systemFont(ofSize: 13, weight: .semibold)
         return name
     }()
 
+    // MARK: Init
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        setConstraints()
     }
 
     @available(*, unavailable)
@@ -35,10 +47,23 @@ class CollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        setConstraints()
+    }
+
+    // MARK: Public Methods
+
+    func setCellWithValues(_ actor: ActorInfo) {
+        setUI(actorImage: actor.actorImage, actorName: actor.name)
+    }
+
+    // MARK: Private Methods
+
     private func setupViews() {
         addSubview(photoOfActor)
         addSubview(nameOfActor)
-        backgroundColor = .green
+        backgroundColor = .black
     }
 
     private func setConstraints() {
@@ -54,15 +79,11 @@ class CollectionViewCell: UICollectionViewCell {
         ])
     }
 
-    func setCellWithValues(_ actor: ActorInfo) {
-        setUI(actorImage: actor.actorImage, actorName: actor.name)
-    }
-
     private func setUI(actorImage: String?, actorName: String?) {
         nameOfActor.text = actorName
         guard let imageString = actorImage else { return }
 
-        let urlString = "https://image.tmdb.org/t/p/w500" + imageString
+        let urlString = Constants.urlImage + imageString
 
         guard let imageURL = URL(string: urlString) else { return }
 
@@ -74,17 +95,17 @@ class CollectionViewCell: UICollectionViewCell {
     private func getImageData(url: URL) {
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
-                print("DataTask error: \(error.localizedDescription)")
+                print(Constants.dataTaskError + "\(error.localizedDescription)")
                 return
             }
 
             guard response != nil else {
-                print("Response")
+                print(Constants.response)
                 return
             }
 
             guard let data = data else {
-                print("Данные не получены")
+                print(Constants.dontGetData)
                 return
             }
 

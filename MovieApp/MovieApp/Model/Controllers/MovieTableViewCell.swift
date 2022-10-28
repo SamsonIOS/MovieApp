@@ -1,10 +1,21 @@
-// FirstTableViewCell.swift
+// MovieTableViewCell.swift
 // Copyright © RoadMap. All rights reserved.
 
 import UIKit
 
-/// vc
-final class FirstTableViewCell: UITableViewCell {
+/// Кастомная ячейка table view
+final class MovieTableViewCell: UITableViewCell {
+    // MARK: Constants
+
+    private enum Constants {
+        static let urlImage = "https://image.tmdb.org/t/p/w500"
+        static let dataTaskError = "DataTask error: "
+        static let response = "respone"
+        static let data = "Данные не получены"
+    }
+
+    // MARK: Public Properties
+
     let filmImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -32,7 +43,7 @@ final class FirstTableViewCell: UITableViewCell {
         return label
     }()
 
-    let viewReit: UIView = {
+    let ratingView: UIView = {
         let view = UIView()
         view.backgroundColor = .purple
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -41,13 +52,15 @@ final class FirstTableViewCell: UITableViewCell {
         return view
     }()
 
-    let retingLabel: UILabel = {
+    let ratingLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.font = .systemFont(ofSize: 12, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+
+    // MARK: Life cycle
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -59,13 +72,21 @@ final class FirstTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: Public Methods
+
+    func setCellWithValues(_ films: Films) {
+        setUI(title: films.title, rating: films.rating, overview: films.overview, filmImage: films.filmImage)
+    }
+
+    // MARK: Private Method
+
     private func setupView() {
         backgroundColor = .black
         addSubview(filmImageView)
         addSubview(nameFilmLabel)
         addSubview(infoFilmLabel)
-        addSubview(viewReit)
-        addSubview(retingLabel)
+        addSubview(ratingView)
+        addSubview(ratingLabel)
 
         NSLayoutConstraint.activate([
             filmImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
@@ -84,29 +105,26 @@ final class FirstTableViewCell: UITableViewCell {
             infoFilmLabel.widthAnchor.constraint(equalToConstant: 170),
             infoFilmLabel.heightAnchor.constraint(equalToConstant: 150),
 
-            viewReit.leadingAnchor.constraint(equalTo: filmImageView.leadingAnchor),
-            viewReit.topAnchor.constraint(equalTo: filmImageView.topAnchor, constant: 0),
-            viewReit.widthAnchor.constraint(equalToConstant: 24),
-            viewReit.heightAnchor.constraint(equalToConstant: 24),
+            ratingView.leadingAnchor.constraint(equalTo: filmImageView.leadingAnchor),
+            ratingView.topAnchor.constraint(equalTo: filmImageView.topAnchor, constant: 0),
+            ratingView.widthAnchor.constraint(equalToConstant: 24),
+            ratingView.heightAnchor.constraint(equalToConstant: 24),
 
-            retingLabel.centerXAnchor.constraint(equalTo: viewReit.centerXAnchor),
-            retingLabel.centerYAnchor.constraint(equalTo: viewReit.centerYAnchor)
+            ratingLabel.centerXAnchor.constraint(equalTo: ratingView.centerXAnchor),
+            ratingLabel.centerYAnchor.constraint(equalTo: ratingView.centerYAnchor)
         ])
-    }
-
-    func setCellWithValues(_ films: Films) {
-        setUI(title: films.title, rating: films.rating, overview: films.overview, filmImage: films.filmImage)
     }
 
     private func setUI(title: String?, rating: Double?, overview: String?, filmImage: String?) {
         nameFilmLabel.text = title
+
         infoFilmLabel.text = overview
 
         guard let rating = rating else { return }
-        retingLabel.text = String(rating)
+        ratingLabel.text = String(rating)
 
         guard let imageString = filmImage else { return }
-        let urlString = "https://image.tmdb.org/t/p/w500" + imageString
+        let urlString = Constants.urlImage + imageString
 
         guard let imageURL = URL(string: urlString) else {
             return
@@ -118,17 +136,17 @@ final class FirstTableViewCell: UITableViewCell {
     private func getImageData(url: URL) {
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
-                print("DataTask error: \(error.localizedDescription)")
+                print(Constants.dataTaskError + "\(error.localizedDescription)")
                 return
             }
 
             guard response != nil else {
-                print("Response")
+                print(Constants.response)
                 return
             }
 
             guard let data = data else {
-                print("Данные не получены")
+                print(Constants.data)
                 return
             }
 

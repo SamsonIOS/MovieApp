@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// vc
+/// Массив фильмов
 struct ModelFilm: Decodable {
     let films: [Films]
 
@@ -12,7 +12,7 @@ struct ModelFilm: Decodable {
     }
 }
 
-/// vc
+/// Модель для получении информации о фильмах
 struct Films: Decodable {
     let title: String?
     let overview: String?
@@ -33,7 +33,7 @@ struct Films: Decodable {
     }
 }
 
-/// Модель  массив Актеры
+/// Массив актеров
 struct ActorModel: Decodable {
     let actor: [ActorInfo]
 
@@ -42,7 +42,7 @@ struct ActorModel: Decodable {
     }
 }
 
-/// Модель Актеры
+/// Модель для получения актеров и их имен
 struct ActorInfo: Decodable {
     let name: String?
     let actorImage: String?

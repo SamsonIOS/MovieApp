@@ -3,9 +3,21 @@
 
 import Foundation
 
-/// vc
+/// Работа с сетью
 final class ApiFilms {
+    // MARK: Constants
+
+    private enum Constants {
+        static let response = "Response status code:"
+        static let emptyResponse = "Empty Response"
+        static let dontGetData = "Данные не получены"
+    }
+
+    // MARK: Private properties
+
     private var dataTask: URLSessionDataTask?
+
+    // MARK: Public Methods
 
     func getActorData(actorsUrl: String, completion: @escaping (Result<ActorModel?, Error>) -> ()) {
         universalFunc(url: actorsUrl, completion: completion)
@@ -24,13 +36,13 @@ final class ApiFilms {
             }
 
             guard let response = response as? HTTPURLResponse else {
-                print("Empty Response")
+                print(Constants.emptyResponse)
                 return
             }
-            print("Response status code: \(response.statusCode)")
+            print(Constants.response + "\(response.statusCode)")
 
             guard let data = data else {
-                print("Данные не получены")
+                print(Constants.dontGetData)
                 return
             }
             do {

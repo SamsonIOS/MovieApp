@@ -3,10 +3,18 @@
 
 import Foundation
 
-/// vc
-final class ActorMovie {
+/// Работа с сетью актеров
+final class ActorViewModel {
+    private enum Constants {
+        static let errorProccecing = "Error processing json data:"
+    }
+
+    // MARK: Private properties
+
     private var apiService = ApiFilms()
     private var actors: [ActorInfo] = []
+
+    // MARK: Public Methods
 
     func fetchActorData(idMovie: Int?, completion: @escaping () -> ()) {
         guard let idMovie = idMovie else { return }
@@ -21,7 +29,7 @@ final class ActorMovie {
                 self?.actors = listOf.actor
                 completion()
             case let .failure(error):
-                print("Error processing json data: \(error)")
+                print(Constants.errorProccecing + "\(error)")
             }
         }
     }

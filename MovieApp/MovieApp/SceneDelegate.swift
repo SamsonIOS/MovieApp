@@ -3,8 +3,8 @@
 
 import UIKit
 
-/// vc
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+/// Scene Delegate
+final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
 
     func scene(

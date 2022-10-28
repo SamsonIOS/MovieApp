@@ -5,17 +5,42 @@ import UIKit
 
 /// Экран со списком фильмов
 final class ViewController: UIViewController {
+    // MARK: Constants
+
+    private enum Url {
+        static let polularMovie =
+            "https://api.themoviedb.org/3/movie/popular?api_key=74b256bd9644791fa138aeb51482b3b8&language=en-US&page=1"
+        static let topRatedMovie =
+            "https://api.themoviedb.org/3/movie/top_rated?api_key=74b256bd9644791fa138aeb51482b3b8&language=en-US&page=1"
+        static let upComingMovie =
+            "https://api.themoviedb.org/3/movie/upcoming?api_key=74b256bd9644791fa138aeb51482b3b8&language=en-US&page=1"
+    }
+
+    private enum ButtonsTitle {
+        static let popular = "Популярные"
+        static let topRating = "Топ рейтинга"
+        static let upComing = "Новинки"
+        static let emptyText = ""
+        static let date = "Дата выхода: "
+    }
+
+    private enum CellId {
+        static let id = "movieCell"
+    }
+
     // MARK: Private properties
 
     private var viewModel = MovieViewModel()
+
     private lazy var popularButton: UIButton = {
         var button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .purple
-        button.setTitle("Популярные", for: .normal)
+        button.setTitle(ButtonsTitle.popular, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 10, weight: .bold)
         button.layer.cornerRadius = 6
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
         button.tag = 0
         return button
     }()
@@ -24,10 +49,11 @@ final class ViewController: UIViewController {
         var button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .purple
-        button.setTitle("Топ рейтинга", for: .normal)
+        button.setTitle(ButtonsTitle.topRating, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 10, weight: .bold)
         button.layer.cornerRadius = 6
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
         button.tag = 1
         return button
     }()
@@ -36,10 +62,11 @@ final class ViewController: UIViewController {
         var button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .purple
-        button.setTitle("Новинки", for: .normal)
+        button.setTitle(ButtonsTitle.upComing, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 10, weight: .bold)
         button.layer.cornerRadius = 6
         button.clipsToBounds = true
+        button.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
         button.tag = 2
         return button
     }()
@@ -47,7 +74,7 @@ final class ViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(FirstTableViewCell.self, forCellReuseIdentifier: "firstCell")
+        tableView.register(MovieTableViewCell.self, forCellReuseIdentifier: CellId.id)
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
@@ -57,27 +84,12 @@ final class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(tableView)
-        title = ""
-        view.backgroundColor = .black
-        tableView.backgroundColor = .black
-        view.addSubview(popularButton)
-        view.addSubview(topRatingsButton)
-        view.addSubview(latestButton)
-        constraintsTableView()
-        navigationController?.navigationBar.barTintColor = .black
-        navigationController?.navigationBar.barStyle = .black
-        navigationController?.navigationBar.tintColor = .black
-        setButtons()
-        loadPopularMoviesData()
-        popularButton.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
-        topRatingsButton.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
-        latestButton.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
+        setView()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        navigationController?.navigationBar.topItem?.title = ""
+        navigationController?.navigationBar.topItem?.title = ButtonsTitle.emptyText
     }
 
     // MARK: Action Buttons
@@ -85,18 +97,15 @@ final class ViewController: UIViewController {
     @objc private func action(sender: UIButton) {
         switch sender.tag {
         case 0:
-            let url =
-                "https://api.themoviedb.org/3/movie/popular?api_key=74b256bd9644791fa138aeb51482b3b8&language=en-US&page=1"
+            let url = Url.polularMovie
             viewModel.filmUrl = url
             loadPopularMoviesData()
         case 1:
-            let url =
-                "https://api.themoviedb.org/3/movie/top_rated?api_key=74b256bd9644791fa138aeb51482b3b8&language=en-US&page=1"
+            let url = Url.topRatedMovie
             viewModel.filmUrl = url
             loadPopularMoviesData()
         case 2:
-            let url =
-                "https://api.themoviedb.org/3/movie/upcoming?api_key=74b256bd9644791fa138aeb51482b3b8&language=en-US&page=1"
+            let url = Url.upComingMovie
             viewModel.filmUrl = url
             loadPopularMoviesData()
         default:
@@ -105,6 +114,22 @@ final class ViewController: UIViewController {
     }
 
     // MARK: Private Methods
+
+    private func setView() {
+        view.addSubview(tableView)
+        view.addSubview(popularButton)
+        view.addSubview(topRatingsButton)
+        view.addSubview(latestButton)
+        navigationController?.navigationBar.barTintColor = .black
+        navigationController?.navigationBar.barStyle = .black
+        navigationController?.navigationBar.tintColor = .black
+        title = ButtonsTitle.emptyText
+        view.backgroundColor = .black
+        tableView.backgroundColor = .black
+        constraintsTableView()
+        setButtons()
+        loadPopularMoviesData()
+    }
 
     private func constraintsTableView() {
         tableView.topAnchor.constraint(equalTo: popularButton.bottomAnchor, constant: 10).isActive = true
@@ -148,9 +173,9 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "firstCell",
+            withIdentifier: CellId.id,
             for: indexPath
-        ) as? FirstTableViewCell else { return UITableViewCell() }
+        ) as? MovieTableViewCell else { return UITableViewCell() }
 
         let movie = viewModel.cellForRowAt(indexPath: indexPath)
         cell.setCellWithValues(movie)
@@ -162,7 +187,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let secondVC = SecondViewController()
         let movie = viewModel.cellForRowAt(indexPath: indexPath)
-        secondVC.nameLabel.text = movie.date
+        guard let movieDate = movie.date else { return }
+        secondVC.dateLabel.text = ButtonsTitle.date + "\(movieDate)"
         secondVC.overviewLabel.text = movie.overview
         secondVC.movieId = movie.id
         secondVC.title = movie.title

@@ -5,9 +5,18 @@ import UIKit
 
 /// Экран с подробной информацией о фильме
 final class SecondViewController: UIViewController {
-    // MARK: Private properties
+    // MARK: Constants
 
-    private var actorModel = ActorMovie()
+    private enum Constants {
+        static let urtImage = "https://image.tmdb.org/t/p/w500"
+        static let collectionCellId = "CollectionCell"
+        static let response = "Response"
+        static let dontGetData = "Данные не получены"
+        static let buttonTitle = "К Списку"
+        static let dataTaskError = "DataTask error:"
+    }
+
+    // MARK: Private properties
 
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -20,30 +29,29 @@ final class SecondViewController: UIViewController {
 
     private lazy var collectionView: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.register(CollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collection.register(CollectionViewCell.self, forCellWithReuseIdentifier: Constants.collectionCellId)
         collection.delegate = self
         collection.dataSource = self
-        collection.backgroundColor = .green
+        collection.backgroundColor = .black
         collection.translatesAutoresizingMaskIntoConstraints = false
         return collection
     }()
 
-    let movieImageView: UIImageView = {
+    private let movieImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.borderWidth = 1
+        imageView.layer.borderColor = UIColor.orange.cgColor
         return imageView
     }()
 
-    let nameLabel: UILabel = {
+    let dateLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 21, weight: .bold)
+        label.font = .systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        // label.backgroundColor = .
-        label.layer.borderWidth = 2
-        label.layer.cornerRadius = 2
-        label.clipsToBounds = true
-        label.layer.borderColor = UIColor.white.cgColor
+        // label.layer.borderWidth = 1
+        //  label.layer.borderColor = UIColor.white.cgColor
         return label
     }()
 
@@ -54,51 +62,73 @@ final class SecondViewController: UIViewController {
         label.textColor = .white
         label.backgroundColor = .black
         label.textContainer.maximumNumberOfLines = 0
-
         label.isEditable = false
         label.isSelectable = false
         label.textContainer.lineBreakMode = .byCharWrapping
         return label
     }()
 
+    private var actorModel = ActorViewModel()
+
     var movieId: Int?
+
+    // MARK: Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setView()
+    }
+
+    // MARK: Public Methods
+
+    func setUI(actorImage: String?) {
+        guard let imageString = actorImage else { return }
+
+        let urlString = Constants.urtImage + imageString
+
+        guard let imageURL = URL(string: urlString) else { return }
+
+        movieImageView.image = nil
+        getImageData(url: imageURL)
+    }
+
+    // MARK: Private Methods
+
+    private func setView() {
         view.backgroundColor = .black
         view.addSubview(movieImageView)
-        view.addSubview(nameLabel)
+        view.addSubview(dateLabel)
         view.addSubview(overviewLabel)
         view.addSubview(collectionView)
-        collectionView.backgroundColor = .black
-        setConstraints()
         navigationController?.navigationBar.tintColor = UIColor.white
         navigationController?.navigationBar
             .titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.orange]
-        navigationController?.navigationBar.topItem?.title = "К Фильмам"
+        navigationController?.navigationBar.topItem?.title = Constants.buttonTitle
+        collectionView.backgroundColor = .black
+        setConstraints()
         loadPopularMoviesData()
     }
 
-    func setConstraints() {
+    private func setConstraints() {
         NSLayoutConstraint.activate([
             movieImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
             movieImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             movieImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             movieImageView.heightAnchor.constraint(equalToConstant: 250),
 
-            nameLabel.topAnchor.constraint(equalTo: movieImageView.bottomAnchor, constant: 20),
-            nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            dateLabel.topAnchor.constraint(equalTo: movieImageView.bottomAnchor, constant: 20),
+            dateLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
             overviewLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            overviewLabel.topAnchor.constraint(equalTo: nameLabel.topAnchor, constant: 30),
+            overviewLabel.topAnchor.constraint(equalTo: dateLabel.topAnchor, constant: 30),
             overviewLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             overviewLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            overviewLabel.heightAnchor.constraint(equalToConstant: 230),
+            overviewLabel.heightAnchor.constraint(equalToConstant: 190),
 
             collectionView.topAnchor.constraint(equalTo: overviewLabel.bottomAnchor, constant: 7),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -30)
         ])
     }
 
@@ -110,31 +140,20 @@ final class SecondViewController: UIViewController {
         }
     }
 
-    func setUI(actorImage: String?) {
-        guard let imageString = actorImage else { return }
-
-        let urlString = "https://image.tmdb.org/t/p/w500" + imageString
-
-        guard let imageURL = URL(string: urlString) else { return }
-
-        movieImageView.image = nil
-        getImageData(url: imageURL)
-    }
-
     private func getImageData(url: URL) {
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
-                print("DataTask error: \(error.localizedDescription)")
+                print(Constants.dataTaskError + "\(error.localizedDescription)")
                 return
             }
 
             guard response != nil else {
-                print("Response")
+                print(Constants.response)
                 return
             }
 
             guard let data = data else {
-                print("Данные не получены")
+                print(Constants.dontGetData)
                 return
             }
 
@@ -147,6 +166,8 @@ final class SecondViewController: UIViewController {
     }
 }
 
+// MARK: UICollectionViewDataSource, UICollectionViewDelegate
+
 extension SecondViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         actorModel.numberOfRowsInSection(section: section)
@@ -157,7 +178,7 @@ extension SecondViewController: UICollectionViewDataSource, UICollectionViewDele
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         guard let cell = collectionView
-            .dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? CollectionViewCell
+            .dequeueReusableCell(withReuseIdentifier: Constants.collectionCellId, for: indexPath) as? CollectionViewCell
         else { return UICollectionViewCell() }
         let actor = actorModel.cellForRowAt(indexPath: indexPath)
         cell.setCellWithValues(actor)

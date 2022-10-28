@@ -3,12 +3,26 @@
 
 import Foundation
 
-/// Доп Файл
+/// Работа с сетью фильмов
 final class MovieViewModel {
+    // MARK: Constants
+
+    private enum Constants {
+        static let errorProcessing = "Error processing json data:"
+        static let url =
+            "https://api.themoviedb.org/3/movie/popular?api_key=74b256bd9644791fa138aeb51482b3b8&language=en-US&page=1"
+    }
+
+    // MARK: Private Properties
+
     private var apiService = ApiFilms()
     private var popularMovies: [Films] = []
-    var filmUrl =
-        "https://api.themoviedb.org/3/movie/popular?api_key=74b256bd9644791fa138aeb51482b3b8&language=en-US&page=1"
+
+    // MARK: Public properties
+
+    var filmUrl = Constants.url
+
+    // MARK: Public Methods
 
     func fetchPopularMoviesData(completion: @escaping () -> ()) {
         apiService.getMoviesData(filmsUrl: filmUrl) { [weak self] result in
@@ -19,7 +33,7 @@ final class MovieViewModel {
                 self?.popularMovies = listOf.films
                 completion()
             case let .failure(error):
-                print("Error processing json data: \(error)")
+                print(Constants.errorProcessing + "\(error)")
             }
         }
     }
