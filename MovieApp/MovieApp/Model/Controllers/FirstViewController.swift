@@ -1,10 +1,10 @@
-// ViewController.swift
+// FirstViewController.swift
 // Copyright © RoadMap. All rights reserved.
 
 import UIKit
 
 /// Экран со списком фильмов
-final class ViewController: UIViewController {
+final class FirstViewController: UIViewController {
     // MARK: Constants
 
     private enum Url {
@@ -25,7 +25,7 @@ final class ViewController: UIViewController {
     }
 
     private enum CellId {
-        static let id = "movieCell"
+        static let movieCellId = "movieCell"
     }
 
     // MARK: Private properties
@@ -74,7 +74,7 @@ final class ViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(MovieTableViewCell.self, forCellReuseIdentifier: CellId.id)
+        tableView.register(MovieTableViewCell.self, forCellReuseIdentifier: CellId.movieCellId)
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
@@ -166,14 +166,14 @@ final class ViewController: UIViewController {
 
 // MARK: UITableViewDelegate, UITableViewDataSource
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.numberOfRowsInSection(section: section)
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: CellId.id,
+            withIdentifier: CellId.movieCellId,
             for: indexPath
         ) as? MovieTableViewCell else { return UITableViewCell() }
 

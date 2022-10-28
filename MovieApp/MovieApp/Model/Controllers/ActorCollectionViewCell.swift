@@ -1,10 +1,10 @@
-// CollectionViewCell.swift
+// ActorCollectionViewCell.swift
 // Copyright © RoadMap. All rights reserved.
 
 import UIKit
 
 /// Кастомная ячейка коллекции
-final class CollectionViewCell: UICollectionViewCell {
+final class ActorCollectionViewCell: UICollectionViewCell {
     // MARK: Constants
 
     private enum Constants {

@@ -12,7 +12,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
-        let pageVC = UINavigationController(rootViewController: ViewController())
+        let pageVC = UINavigationController(rootViewController: FirstViewController())
         window?.rootViewController = pageVC
         window?.makeKeyAndVisible()
     }

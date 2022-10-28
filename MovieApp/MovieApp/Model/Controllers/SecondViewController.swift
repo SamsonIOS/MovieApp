@@ -29,7 +29,7 @@ final class SecondViewController: UIViewController {
 
     private lazy var collectionView: UICollectionView = {
         let collection = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collection.register(CollectionViewCell.self, forCellWithReuseIdentifier: Constants.collectionCellId)
+        collection.register(ActorCollectionViewCell.self, forCellWithReuseIdentifier: Constants.collectionCellId)
         collection.delegate = self
         collection.dataSource = self
         collection.backgroundColor = .black
@@ -178,7 +178,10 @@ extension SecondViewController: UICollectionViewDataSource, UICollectionViewDele
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
         guard let cell = collectionView
-            .dequeueReusableCell(withReuseIdentifier: Constants.collectionCellId, for: indexPath) as? CollectionViewCell
+            .dequeueReusableCell(
+                withReuseIdentifier: Constants.collectionCellId,
+                for: indexPath
+            ) as? ActorCollectionViewCell
         else { return UICollectionViewCell() }
         let actor = actorModel.cellForRowAt(indexPath: indexPath)
         cell.setCellWithValues(actor)

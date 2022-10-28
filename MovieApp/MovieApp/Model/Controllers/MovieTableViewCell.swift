@@ -11,7 +11,7 @@ final class MovieTableViewCell: UITableViewCell {
         static let urlImage = "https://image.tmdb.org/t/p/w500"
         static let dataTaskError = "DataTask error: "
         static let response = "respone"
-        static let data = "Данные не получены"
+        static let dontGetData = "Данные не получены"
     }
 
     // MARK: Public Properties
@@ -146,7 +146,7 @@ final class MovieTableViewCell: UITableViewCell {
             }
 
             guard let data = data else {
-                print(Constants.data)
+                print(Constants.dontGetData)
                 return
             }
 
