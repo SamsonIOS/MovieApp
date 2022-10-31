@@ -30,7 +30,7 @@ final class FirstViewController: UIViewController {
 
     // MARK: Private properties
 
-    private var viewModel = MovieViewModel()
+    private var movieView = NetworkLayer()
 
     private lazy var popularButton: UIButton = {
         var button = UIButton()
@@ -40,7 +40,7 @@ final class FirstViewController: UIViewController {
         button.titleLabel?.font = .systemFont(ofSize: 10, weight: .bold)
         button.layer.cornerRadius = 6
         button.clipsToBounds = true
-        button.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(clickAction(sender:)), for: .touchUpInside)
         button.tag = 0
         return button
     }()
@@ -53,7 +53,7 @@ final class FirstViewController: UIViewController {
         button.titleLabel?.font = .systemFont(ofSize: 10, weight: .bold)
         button.layer.cornerRadius = 6
         button.clipsToBounds = true
-        button.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(clickAction(sender:)), for: .touchUpInside)
         button.tag = 1
         return button
     }()
@@ -66,7 +66,7 @@ final class FirstViewController: UIViewController {
         button.titleLabel?.font = .systemFont(ofSize: 10, weight: .bold)
         button.layer.cornerRadius = 6
         button.clipsToBounds = true
-        button.addTarget(self, action: #selector(action(sender:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(clickAction(sender:)), for: .touchUpInside)
         button.tag = 2
         return button
     }()
@@ -94,26 +94,26 @@ final class FirstViewController: UIViewController {
 
     // MARK: Action Buttons
 
-    @objc private func action(sender: UIButton) {
+    @objc private func clickAction(sender: UIButton) {
         switch sender.tag {
         case 0:
-            let url = Url.polularMovie
-            viewModel.filmUrl = url
-            loadPopularMoviesData()
+            switchMovies(urlMovies: Url.polularMovie)
         case 1:
-            let url = Url.topRatedMovie
-            viewModel.filmUrl = url
-            loadPopularMoviesData()
+            switchMovies(urlMovies: Url.topRatedMovie)
         case 2:
-            let url = Url.upComingMovie
-            viewModel.filmUrl = url
-            loadPopularMoviesData()
+            switchMovies(urlMovies: Url.upComingMovie)
         default:
             break
         }
     }
 
     // MARK: Private Methods
+
+    private func switchMovies(urlMovies: String) {
+        let url = urlMovies
+        movieView.filmUrl = url
+        loadPopularMoviesData()
+    }
 
     private func setView() {
         view.addSubview(tableView)
@@ -156,7 +156,7 @@ final class FirstViewController: UIViewController {
     }
 
     private func loadPopularMoviesData() {
-        viewModel.fetchPopularMoviesData { [weak self] in
+        movieView.fetchPopularMoviesData { [weak self] in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
             }
@@ -168,7 +168,7 @@ final class FirstViewController: UIViewController {
 
 extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.numberOfRowsInSection(section: section)
+        movieView.numberOfRowsInSection(section: section)
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -177,22 +177,26 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
             for: indexPath
         ) as? MovieTableViewCell else { return UITableViewCell() }
 
-        let movie = viewModel.cellForRowAt(indexPath: indexPath)
+        let movie = movieView.cellForRowAt(indexPath: indexPath)
         cell.setCellWithValues(movie)
         cell.selectionStyle = .none
 
         return cell
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    private func goToSecondVC(indexPath: IndexPath) {
         let secondVC = SecondViewController()
-        let movie = viewModel.cellForRowAt(indexPath: indexPath)
+        let movie = movieView.cellForRowAt(indexPath: indexPath)
         guard let movieDate = movie.date else { return }
-        secondVC.dateLabel.text = ButtonsTitle.date + "\(movieDate)"
+        secondVC.dateLabel.text = "\(ButtonsTitle.date) \(movieDate)"
         secondVC.overviewLabel.text = movie.overview
         secondVC.movieId = movie.id
         secondVC.title = movie.title
         secondVC.setUI(actorImage: movie.backdropImage)
         navigationController?.pushViewController(secondVC, animated: true)
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        goToSecondVC(indexPath: indexPath)
     }
 }

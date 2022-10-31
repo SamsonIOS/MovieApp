@@ -9,14 +9,12 @@ final class MovieTableViewCell: UITableViewCell {
 
     private enum Constants {
         static let urlImage = "https://image.tmdb.org/t/p/w500"
-        static let dataTaskError = "DataTask error: "
-        static let response = "respone"
-        static let dontGetData = "Данные не получены"
+        static let initErrorText = "init(coder:) has not been implemented"
     }
 
     // MARK: Public Properties
 
-    let filmImageView: UIImageView = {
+    private let filmImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 15
@@ -24,7 +22,7 @@ final class MovieTableViewCell: UITableViewCell {
         return imageView
     }()
 
-    let nameFilmLabel: UILabel = {
+    private let nameFilmLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.textAlignment = .center
@@ -34,7 +32,7 @@ final class MovieTableViewCell: UITableViewCell {
         return label
     }()
 
-    let infoFilmLabel: UITextView = {
+    private let infoFilmLabel: UITextView = {
         let label = UITextView()
         label.font = .systemFont(ofSize: 13, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -43,7 +41,7 @@ final class MovieTableViewCell: UITableViewCell {
         return label
     }()
 
-    let ratingView: UIView = {
+    private let ratingView: UIView = {
         let view = UIView()
         view.backgroundColor = .purple
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -52,7 +50,7 @@ final class MovieTableViewCell: UITableViewCell {
         return view
     }()
 
-    let ratingLabel: UILabel = {
+    private let ratingLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
         label.font = .systemFont(ofSize: 12, weight: .bold)
@@ -65,29 +63,23 @@ final class MovieTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
+        setConstraints()
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(Constants.initErrorText)
     }
 
     // MARK: Public Methods
 
-    func setCellWithValues(_ films: Films) {
-        setUI(title: films.title, rating: films.rating, overview: films.overview, filmImage: films.filmImage)
+    func setCellWithValues(_ movie: Movies) {
+        setUI(title: movie.title, rating: movie.rating, overview: movie.overview, filmImage: movie.movieImage)
     }
 
     // MARK: Private Method
 
-    private func setupView() {
-        backgroundColor = .black
-        addSubview(filmImageView)
-        addSubview(nameFilmLabel)
-        addSubview(infoFilmLabel)
-        addSubview(ratingView)
-        addSubview(ratingLabel)
-
+    private func setConstraints() {
         NSLayoutConstraint.activate([
             filmImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             filmImageView.topAnchor.constraint(equalTo: topAnchor, constant: 10),
@@ -115,6 +107,15 @@ final class MovieTableViewCell: UITableViewCell {
         ])
     }
 
+    private func setupView() {
+        backgroundColor = .black
+        addSubview(filmImageView)
+        addSubview(nameFilmLabel)
+        addSubview(infoFilmLabel)
+        addSubview(ratingView)
+        addSubview(ratingLabel)
+    }
+
     private func setUI(title: String?, rating: Double?, overview: String?, filmImage: String?) {
         nameFilmLabel.text = title
 
@@ -134,19 +135,8 @@ final class MovieTableViewCell: UITableViewCell {
     }
 
     private func getImageData(url: URL) {
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print(Constants.dataTaskError + "\(error.localizedDescription)")
-                return
-            }
-
-            guard response != nil else {
-                print(Constants.response)
-                return
-            }
-
+        URLSession.shared.dataTask(with: url) { data, _, _ in
             guard let data = data else {
-                print(Constants.dontGetData)
                 return
             }
 

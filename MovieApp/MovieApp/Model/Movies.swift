@@ -1,10 +1,10 @@
-// FilmsViewModel.swift
+// Movies.swift
 // Copyright © RoadMap. All rights reserved.
 
 import Foundation
 
 /// Работа с сетью фильмов
-final class MovieViewModel {
+final class NetworkLayer {
     // MARK: Constants
 
     private enum Constants {
@@ -16,7 +16,7 @@ final class MovieViewModel {
     // MARK: Private Properties
 
     private var apiService = ApiFilms()
-    private var popularMovies: [Films] = []
+    private var popularMovies: [Movies] = []
 
     // MARK: Public properties
 
@@ -30,7 +30,7 @@ final class MovieViewModel {
             switch result {
             case let .success(listOf):
                 guard let listOf = listOf else { return }
-                self?.popularMovies = listOf.films
+                self?.popularMovies = listOf.movies
                 completion()
             case let .failure(error):
                 print(Constants.errorProcessing + "\(error)")
@@ -45,7 +45,7 @@ final class MovieViewModel {
         return 0
     }
 
-    func cellForRowAt(indexPath: IndexPath) -> Films {
+    func cellForRowAt(indexPath: IndexPath) -> Movies {
         popularMovies[indexPath.row]
     }
 }

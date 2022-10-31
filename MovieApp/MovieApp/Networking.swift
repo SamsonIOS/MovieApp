@@ -19,15 +19,15 @@ final class ApiFilms {
 
     // MARK: Public Methods
 
-    func getActorData(actorsUrl: String, completion: @escaping (Result<ActorModel?, Error>) -> ()) {
+    func getActorData(actorsUrl: String, completion: @escaping (Result<Actor?, Error>) -> ()) {
         universalFunc(url: actorsUrl, completion: completion)
     }
 
-    func getMoviesData(filmsUrl: String, completion: @escaping (Result<ModelFilm?, Error>) -> ()) {
+    func getMoviesData(filmsUrl: String, completion: @escaping (Result<Movie?, Error>) -> ()) {
         universalFunc(url: filmsUrl, completion: completion)
     }
 
-    func universalFunc<T: Decodable>(url: String, completion: @escaping (Result<T?, Error>) -> ()) {
+    private func universalFunc<T: Decodable>(url: String, completion: @escaping (Result<T?, Error>) -> ()) {
         guard let url = URL(string: url) else { return }
         dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
@@ -39,7 +39,6 @@ final class ApiFilms {
                 print(Constants.emptyResponse)
                 return
             }
-            print(Constants.response + "\(response.statusCode)")
 
             guard let data = data else {
                 print(Constants.dontGetData)

@@ -1,22 +1,22 @@
-// ModelFilm.swift
+// Models.swift
 // Copyright © RoadMap. All rights reserved.
 
 import Foundation
 
 /// Массив фильмов
-struct ModelFilm: Decodable {
-    let films: [Films]
+struct Movie: Decodable {
+    let movies: [Movies]
 
     enum CodingKeys: String, CodingKey {
-        case films = "results"
+        case movies = "results"
     }
 }
 
 /// Модель для получении информации о фильмах
-struct Films: Decodable {
+struct Movies: Decodable {
     let title: String?
     let overview: String?
-    let filmImage: String?
+    let movieImage: String?
     let rating: Double?
     let id: Int?
     let backdropImage: String?
@@ -25,7 +25,7 @@ struct Films: Decodable {
     enum CodingKeys: String, CodingKey {
         case title
         case overview
-        case filmImage = "poster_path"
+        case movieImage = "poster_path"
         case rating = "vote_average"
         case id
         case backdropImage = "backdrop_path"
@@ -34,11 +34,11 @@ struct Films: Decodable {
 }
 
 /// Массив актеров
-struct ActorModel: Decodable {
-    let actor: [ActorInfo]
+struct Actor: Decodable {
+    let actors: [ActorInfo]
 
     private enum CodingKeys: String, CodingKey {
-        case actor = "cast"
+        case actors = "cast"
     }
 }
 

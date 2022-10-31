@@ -8,12 +8,12 @@ final class SecondViewController: UIViewController {
     // MARK: Constants
 
     private enum Constants {
-        static let urtImage = "https://image.tmdb.org/t/p/w500"
+        static let imageUrl = "https://image.tmdb.org/t/p/w500"
         static let collectionCellId = "CollectionCell"
-        static let response = "Response"
-        static let dontGetData = "Данные не получены"
+        static let responseText = "Response"
+        static let dontGetDataText = "Данные не получены"
         static let buttonTitle = "К Списку"
-        static let dataTaskError = "DataTask error:"
+        static let dataTaskErrorText = "DataTask error:"
     }
 
     // MARK: Private properties
@@ -50,8 +50,6 @@ final class SecondViewController: UIViewController {
         label.font = .systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
-        // label.layer.borderWidth = 1
-        //  label.layer.borderColor = UIColor.white.cgColor
         return label
     }()
 
@@ -68,7 +66,7 @@ final class SecondViewController: UIViewController {
         return label
     }()
 
-    private var actorModel = ActorViewModel()
+    private var actor = Actors()
 
     var movieId: Int?
 
@@ -84,7 +82,7 @@ final class SecondViewController: UIViewController {
     func setUI(actorImage: String?) {
         guard let imageString = actorImage else { return }
 
-        let urlString = Constants.urtImage + imageString
+        let urlString = "\(Constants.imageUrl)\(imageString)"
 
         guard let imageURL = URL(string: urlString) else { return }
 
@@ -106,7 +104,7 @@ final class SecondViewController: UIViewController {
         navigationController?.navigationBar.topItem?.title = Constants.buttonTitle
         collectionView.backgroundColor = .black
         setConstraints()
-        loadPopularMoviesData()
+        loadPopularMovie()
     }
 
     private func setConstraints() {
@@ -132,8 +130,8 @@ final class SecondViewController: UIViewController {
         ])
     }
 
-    private func loadPopularMoviesData() {
-        actorModel.fetchActorData(idMovie: movieId) { [weak self] in
+    private func loadPopularMovie() {
+        actor.fetchActorData(idMovie: movieId) { [weak self] in
             DispatchQueue.main.async {
                 self?.collectionView.reloadData()
             }
@@ -143,17 +141,17 @@ final class SecondViewController: UIViewController {
     private func getImageData(url: URL) {
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
-                print(Constants.dataTaskError + "\(error.localizedDescription)")
+                print("\(Constants.dataTaskErrorText) \(error.localizedDescription)")
                 return
             }
 
             guard response != nil else {
-                print(Constants.response)
+                print(Constants.responseText)
                 return
             }
 
             guard let data = data else {
-                print(Constants.dontGetData)
+                print(Constants.dontGetDataText)
                 return
             }
 
@@ -170,7 +168,7 @@ final class SecondViewController: UIViewController {
 
 extension SecondViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        actorModel.numberOfRowsInSection(section: section)
+        actor.numberOfRowsInSection(section: section)
     }
 
     func collectionView(
@@ -183,7 +181,7 @@ extension SecondViewController: UICollectionViewDataSource, UICollectionViewDele
                 for: indexPath
             ) as? ActorCollectionViewCell
         else { return UICollectionViewCell() }
-        let actor = actorModel.cellForRowAt(indexPath: indexPath)
+        let actor = actor.cellForRowAt(indexPath: indexPath)
         cell.setCellWithValues(actor)
         cell.layer.cornerRadius = 5
         cell.clipsToBounds = true

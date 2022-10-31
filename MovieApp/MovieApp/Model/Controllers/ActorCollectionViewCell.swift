@@ -9,14 +9,15 @@ final class ActorCollectionViewCell: UICollectionViewCell {
 
     private enum Constants {
         static let urlImage = "https://image.tmdb.org/t/p/w500"
-        static let dataTaskError = "DataTask error: "
-        static let response = "Response"
-        static let dontGetData = "Данные не получены"
+        static let dataTaskErrorText = "DataTask error: "
+        static let responseText = "Response"
+        static let dontGetDataText = "Данные не получены"
+        static let initErrorText = "init(coder:) has not been implemented"
     }
 
-    // MARK: Public properties
+    // MARK: Private Visual Components
 
-    private let photoOfActor: UIImageView = {
+    let actorPhotoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleToFill
         imageView.layer.cornerRadius = 5
@@ -27,7 +28,7 @@ final class ActorCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
 
-    private let nameOfActor: UILabel = {
+    let actorNameLabel: UILabel = {
         let name = UILabel()
         name.textColor = .white
         name.translatesAutoresizingMaskIntoConstraints = false
@@ -44,7 +45,7 @@ final class ActorCollectionViewCell: UICollectionViewCell {
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError(Constants.initErrorText)
     }
 
     override func layoutSubviews() {
@@ -61,57 +62,51 @@ final class ActorCollectionViewCell: UICollectionViewCell {
     // MARK: Private Methods
 
     private func setupViews() {
-        addSubview(photoOfActor)
-        addSubview(nameOfActor)
+        addSubview(actorPhotoImageView)
+        addSubview(actorNameLabel)
         backgroundColor = .black
     }
 
     private func setConstraints() {
         NSLayoutConstraint.activate([
-            nameOfActor.centerXAnchor.constraint(equalTo: centerXAnchor),
-            nameOfActor.topAnchor.constraint(equalTo: topAnchor, constant: 2),
-            nameOfActor.bottomAnchor.constraint(equalTo: photoOfActor.topAnchor, constant: 2),
+            actorNameLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            actorNameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 2),
+            actorNameLabel.bottomAnchor.constraint(equalTo: actorPhotoImageView.topAnchor, constant: 2),
 
-            photoOfActor.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
-            photoOfActor.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
-            photoOfActor.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4),
-            photoOfActor.heightAnchor.constraint(equalToConstant: 200),
+            actorPhotoImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5),
+            actorPhotoImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 4),
+            actorPhotoImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -4),
+            actorPhotoImageView.heightAnchor.constraint(equalToConstant: 200),
         ])
     }
 
     private func setUI(actorImage: String?, actorName: String?) {
-        nameOfActor.text = actorName
+        actorNameLabel.text = actorName
         guard let imageString = actorImage else { return }
 
         let urlString = Constants.urlImage + imageString
 
         guard let imageURL = URL(string: urlString) else { return }
 
-        photoOfActor.image = nil
-        print(urlString)
+        actorPhotoImageView.image = nil
         getImageData(url: imageURL)
     }
 
     private func getImageData(url: URL) {
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        URLSession.shared.dataTask(with: url) { data, _, error in
             if let error = error {
-                print(Constants.dataTaskError + "\(error.localizedDescription)")
-                return
-            }
-
-            guard response != nil else {
-                print(Constants.response)
+                print("\(Constants.dataTaskErrorText) \(error.localizedDescription)")
                 return
             }
 
             guard let data = data else {
-                print(Constants.dontGetData)
+                print(Constants.dontGetDataText)
                 return
             }
 
             DispatchQueue.main.async {
                 if let image = UIImage(data: data) {
-                    self.photoOfActor.image = image
+                    self.actorPhotoImageView.image = image
                 }
             }
         }.resume()
