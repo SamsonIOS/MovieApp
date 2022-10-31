@@ -187,12 +187,8 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource {
     private func goToSecondVC(indexPath: IndexPath) {
         let secondVC = SecondViewController()
         let movie = movieView.cellForRowAt(indexPath: indexPath)
-        guard let movieDate = movie.date else { return }
-        secondVC.dateLabel.text = "\(ButtonsTitle.date) \(movieDate)"
-        secondVC.overviewLabel.text = movie.overview
-        secondVC.movieId = movie.id
-        secondVC.title = movie.title
-        secondVC.setUI(actorImage: movie.backdropImage)
+        guard let secondMovieImage = movie.backdropImage else { return }
+        secondVC.setUI(movie: movie, imageUrl: secondMovieImage)
         navigationController?.pushViewController(secondVC, animated: true)
     }
 

@@ -74,7 +74,21 @@ final class MovieTableViewCell: UITableViewCell {
     // MARK: Public Methods
 
     func setCellWithValues(_ movie: Movies) {
-        setUI(title: movie.title, rating: movie.rating, overview: movie.overview, filmImage: movie.movieImage)
+        nameFilmLabel.text = movie.title
+
+        infoFilmLabel.text = movie.overview
+
+        guard let rating = movie.rating else { return }
+        ratingLabel.text = String(rating)
+
+        guard let imageString = movie.movieImage else { return }
+        let urlString = Constants.urlImage + imageString
+
+        guard let imageURL = URL(string: urlString) else {
+            return
+        }
+
+        getImageData(url: imageURL)
     }
 
     // MARK: Private Method
@@ -114,24 +128,6 @@ final class MovieTableViewCell: UITableViewCell {
         addSubview(infoFilmLabel)
         addSubview(ratingView)
         addSubview(ratingLabel)
-    }
-
-    private func setUI(title: String?, rating: Double?, overview: String?, filmImage: String?) {
-        nameFilmLabel.text = title
-
-        infoFilmLabel.text = overview
-
-        guard let rating = rating else { return }
-        ratingLabel.text = String(rating)
-
-        guard let imageString = filmImage else { return }
-        let urlString = Constants.urlImage + imageString
-
-        guard let imageURL = URL(string: urlString) else {
-            return
-        }
-
-        getImageData(url: imageURL)
     }
 
     private func getImageData(url: URL) {

@@ -45,7 +45,7 @@ final class SecondViewController: UIViewController {
         return imageView
     }()
 
-    let dateLabel: UILabel = {
+    private let dateLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 18, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -53,7 +53,7 @@ final class SecondViewController: UIViewController {
         return label
     }()
 
-    let overviewLabel: UITextView = {
+    private let overviewLabel: UITextView = {
         let label = UITextView()
         label.font = .monospacedDigitSystemFont(ofSize: 15, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -79,13 +79,13 @@ final class SecondViewController: UIViewController {
 
     // MARK: Public Methods
 
-    func setUI(actorImage: String?) {
-        guard let imageString = actorImage else { return }
-
-        let urlString = "\(Constants.imageUrl)\(imageString)"
-
+    func setUI(movie: Movies, imageUrl: String) {
+        dateLabel.text = movie.date
+        overviewLabel.text = movie.overview
+        movieId = movie.id
+        title = movie.title
+        let urlString = "\(Constants.imageUrl)\(imageUrl)"
         guard let imageURL = URL(string: urlString) else { return }
-
         movieImageView.image = nil
         getImageData(url: imageURL)
     }
